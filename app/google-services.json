@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "15632361999",
+    "firebase_url": "https://naukri-2f86b.firebaseio.com",
+    "project_id": "naukri-2f86b",
+    "storage_bucket": "naukri-2f86b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15632361999:android:0dfdaa8332ef39d3c5d17a",
+        "android_client_info": {
+          "package_name": "com.example.hackdcrust"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "15632361999-i9ug2ljk0d8oskl2t45bpdvbut9c9li7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.hackdcrust",
+            "certificate_hash": "53bb737e542095f8cc5edcf8e8655c4c1b519514"
+          }
+        },
+        {
+          "client_id": "15632361999-usrkndkfj7j5gvc86bj4a7hqv8v6l83v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1VF-LsBBWOS_i6n3BhGBkJ9q0uN7ZzNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15632361999-usrkndkfj7j5gvc86bj4a7hqv8v6l83v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
