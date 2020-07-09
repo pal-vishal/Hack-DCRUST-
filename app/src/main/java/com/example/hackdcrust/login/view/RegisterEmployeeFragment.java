@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +116,15 @@ public class RegisterEmployeeFragment extends Fragment {
         Technician = view.findViewById(R.id.chiptech);
         goods = view.findViewById(R.id.chipgoods);
 
+        //geolocation
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getLastLocation();
+
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+        }
+
         painter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,12 +225,45 @@ public class RegisterEmployeeFragment extends Fragment {
                     Toast.makeText(getContext(), "Please fill all details", Toast.LENGTH_SHORT).show();
                 }
                 uploadphoto();
+                startActivity(new Intent(getContext(),ThankyouActivity.class));
             }
         });
 
 //kya krna chah rhe
 
         return view;
+    }
+
+    private void getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location = task.getResult();
+                if (location != null) {
+                    Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                    try {
+                        addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                        etDistrict.getEditText().setText(addressList.get(0).getLocality());
+                        etCity.getEditText().setText(addressList.get(0).getPostalCode());
+                        pinCode = Integer.parseInt(addressList.get(0).getPostalCode());
+                        Log.d("pin", "" + pinCode);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
     }
 
 
