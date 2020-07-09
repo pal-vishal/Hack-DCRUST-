@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.view.RegisterEmployeeFragment">
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -42,6 +50,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView3"
+        android:translationZ="8dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -194,6 +203,7 @@
 
     <Button
         android:id="@+id/submitEmplee"
+        android:translationZ="2dp"
         style="@style/ButtonFilled"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -291,3 +301,4 @@
         app:layout_constraintStart_toEndOf="@+id/chiptech"
         app:layout_constraintTop_toTopOf="@+id/chiptech" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

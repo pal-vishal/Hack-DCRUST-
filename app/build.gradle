@@ -67,4 +67,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'com.shreyaspatil:MaterialDialog:2.1'
+
+    // Material Design Library
+
+
+    // Lottie Animation Library
+    implementation 'com.airbnb.android:lottie:3.4.0'
 }

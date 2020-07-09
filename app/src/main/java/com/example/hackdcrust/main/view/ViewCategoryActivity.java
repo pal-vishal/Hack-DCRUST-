@@ -40,8 +40,8 @@ public class ViewCategoryActivity extends AppCompatActivity implements ViewCateg
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Intent intent = getIntent();
-        if (intent.getIntExtra(Constants.PIN_CODE, Integer.MAX_VALUE) != Integer.MAX_VALUE) {
-            pinCode = intent.getIntExtra(Constants.PIN_CODE, Integer.MAX_VALUE);
+        if (intent.getIntExtra("PinCode", Integer.MAX_VALUE) != Integer.MAX_VALUE) {
+            pinCode = intent.getIntExtra("PinCode", Integer.MAX_VALUE);
         }
         if (intent.getStringExtra(Constants.CATEGORY) != null) {
             category = intent.getStringExtra(Constants.CATEGORY);

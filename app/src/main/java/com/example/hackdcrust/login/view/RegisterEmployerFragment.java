@@ -3,7 +3,9 @@ package com.example.hackdcrust.login.view;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -11,6 +13,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.hackdcrust.R;
 import com.example.hackdcrust.login.model.PostData;
@@ -41,6 +46,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
+import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
 
 import java.io.IOException;
@@ -71,12 +78,14 @@ public class RegisterEmployerFragment extends Fragment {
     TextInputLayout etName;
 
     String name, phoneNumber, district;
-    int pinCode;
+    Integer pinCode;
 
     private static final String TAG = "Employer Fragment";
     int LOCATION_REQUEST_CODE = 10001;
 
     ImageView fetchLocation;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
 
     @Override
@@ -91,6 +100,7 @@ public class RegisterEmployerFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_register_employer, container, false);
 
 
+        OpenDialog();
         circleImageView = view.findViewById(R.id.ivUploadedImageemp);
         msubmit = view.findViewById(R.id.empl_submit);
 
@@ -134,7 +144,7 @@ public class RegisterEmployerFragment extends Fragment {
 
                 } else {
                     name = etName.getEditText().getText().toString();
-                    pinCode = Integer.parseInt(etCity.getEditText().getText().toString());
+                //    pinCode = Integer.parseInt(etCity.getEditText().getText().toString());
                     district = etDistrict.getEditText().getText().toString();
 
                     uploadphoto();
@@ -142,7 +152,43 @@ public class RegisterEmployerFragment extends Fragment {
 
             }
         });
+
+        sharedPreferences = getContext().getSharedPreferences("Naukri", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+
         return view;
+    }
+
+    private void OpenDialog() {
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(getActivity())
+                .setTitle("Continue as:")
+                .setAnimation(R.raw.hiring)
+                .setCancelable(false)
+                .setPositiveButton("Employee", new BottomSheetMaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        //Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_SHORT).show();
+                        RegisterEmployeeFragment employeeFragment = new RegisterEmployeeFragment();
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.container, employeeFragment);
+                        transaction.commit();
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setNegativeButton("Employer", new BottomSheetMaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                       // Toast.makeText(getApplicationContext(), "Cancelled!", Toast.LENGTH_SHORT).show();
+                        dialogInterface.dismiss();
+                    }
+                })
+                .build();
+
+        // Show Dialog
+        mBottomSheetDialog.show();
     }
 
 
@@ -178,6 +224,8 @@ public class RegisterEmployerFragment extends Fragment {
                         addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                         etDistrict.getEditText().setText(addressList.get(0).getLocality());
                         etCity.getEditText().setText(addressList.get(0).getPostalCode());
+                        pinCode = Integer.parseInt(addressList.get(0).getPostalCode());
+                        Log.d("pin",""+pinCode);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -254,15 +302,22 @@ public class RegisterEmployerFragment extends Fragment {
         call.enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
-                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-                startActivity(new Intent(getContext(), MainActivity.class));
-                getActivity().finish();
+                if (response.isSuccessful()){
+                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    Log.d("Response",""+response.message());
+                    editor.putInt("pinCode",response.body().getPincode());
+                    editor.commit();
+                    progressDialog.dismiss();
+                    startActivity(new Intent(getContext(), MainActivity.class));
+                    getActivity().finish();
+                }
+
             }
 
             @Override
             public void onFailure(Call<PostResponse> call, Throwable t) {
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.d("failure",""+t.getMessage());
                 progressDialog.dismiss();
             }
         });

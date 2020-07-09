@@ -2,7 +2,7 @@ package com.example.hackdcrust.util;
 
 public class Constants {
     public static final String PHONE_NUMBER = "phoneNumber";
-    public static final String BASE_URL = "http://13.235.43.83:9090/";
+    public static final String BASE_URL = "http://demo9608891.mockable.io/";
     public static final String PIN_CODE = "pinCode";
     public static final String CATEGORY = "category";
     //TODO: ADD YOUTUBE_URL HERE

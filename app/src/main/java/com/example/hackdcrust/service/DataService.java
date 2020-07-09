@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface DataService {
-    @POST("user")
+    @POST("usern")
     Call<PostResponse> createPost(@Body PostData postData);
 
     @GET("searchEmployees")

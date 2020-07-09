@@ -1,7 +1,10 @@
 package com.example.hackdcrust.main.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,6 +89,7 @@ public class HomeFragment extends Fragment implements CategoriesRecyclerViewAdap
             public void onChanged(PostResponse postResponse) {
               //  progressBar.setVisibility(View.INVISIBLE);
                 userData = postResponse;
+            //    Log.d("pincode",""+ userData.getPincode());
                 if (userData.getIsEmployee()) {
                     showThankYouScreen();
                 } else {
@@ -124,8 +128,13 @@ public class HomeFragment extends Fragment implements CategoriesRecyclerViewAdap
 
     @Override
     public void onCategoryClicked(JobCategory jobCategory) {
+        SharedPreferences sharedPreferences;
+        SharedPreferences.Editor editor;
+        sharedPreferences = getContext().getSharedPreferences("Naukri", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         Intent intent = new Intent(getContext(), ViewCategoryActivity.class);
-        intent.putExtra(Constants.PIN_CODE, userData.getPincode());
+        intent.putExtra("PinCode",sharedPreferences.getInt("pinCode",0));
         intent.putExtra(Constants.CATEGORY, jobCategory.getCategory());
         startActivity(intent);
     }

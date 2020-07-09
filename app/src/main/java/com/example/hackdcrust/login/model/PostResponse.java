@@ -108,4 +108,15 @@ public class PostResponse {
         this.v = v;
     }
 
+    public PostResponse(List<String> skills, String id, Boolean isEmployee, String name, Long phone, String district, Integer pincode, String uid, Integer v) {
+        this.skills = skills;
+        this.id = id;
+        this.isEmployee = isEmployee;
+        this.name = name;
+        this.phone = phone;
+        this.district = district;
+        this.pincode = pincode;
+        this.uid = uid;
+        this.v = v;
+    }
 }

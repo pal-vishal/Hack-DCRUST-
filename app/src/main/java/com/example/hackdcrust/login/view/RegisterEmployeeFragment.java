@@ -47,6 +47,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -285,6 +287,10 @@ public class RegisterEmployeeFragment extends Fragment {
     public void afterImageUpload() {
         //TODO : Upload data here
 
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        clientBuilder.addInterceptor(loggingInterceptor);
 
         progressDialog.setTitle("Registering");
         PostData postData = new PostData(name, "1231231231", FirebaseAuth.getInstance().getUid(), district, true, pinCode, skills);
@@ -292,10 +298,13 @@ public class RegisterEmployeeFragment extends Fragment {
         call.enqueue(new Callback<PostResponse>() {
             @Override
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
-                Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
-                progressDialog.dismiss();
-                startActivity(new Intent(getContext(), MainActivity.class));
-                getActivity().finish();
+                if (response.isSuccessful()){
+                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                    startActivity(new Intent(getContext(), MainActivity.class));
+                    getActivity().finish();
+                }
+
             }
 
             @Override
